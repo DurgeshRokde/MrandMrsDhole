@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Valentine ❤️</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial;
+        }
+
+        body {
+            height: 100vh;
+            background: #ff2e63;
+            /* background: black; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .container {
+            background: white;
+            width: 90%;
+            max-width: 360px;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .mainText {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .mainPara {
+            /* text-align: left; */
+            font-size: 17px;
+        }
+
+        .buttons {
+            margin-top: 25px;
+            height: 80px;
+            position: relative;
+            text-align: left;
+        }
+
+        button {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #yes {
+            background: #ff2e63;
+            color: white;
+            margin-right: 10px;
+            height: 2.8rem;
+        }
+
+        #no {
+            background: black;
+            color: white;
+            position: absolute;
+            right: 10px;
+            top: 0;
+            width: 4.8rem;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 40px;
+            animation: float 6s linear infinite;
+            z-index: 99999;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(-20vh);
+                opacity: 0;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .bigHeart {
+            font-size: 45px;
+        }
+
+        .quote {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .heart-img {
+            position: absolute;
+            /* font-size: 1rem; */
+            animation: float 6s linear infinite;
+            z-index: 99999;
+
+        }
+
+        .heart-img img {
+            width: 10rem;
+            height: 10rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="fireworks"></canvas>
+
+    <audio id="song">
+        <source src="/Users/greatplaceitservices/Downloads/whatsapp-audio-2026-02-08-at-111806-pm_JhTqRYYJ.mp3">
+    </audio>
+
+    <div class="container" id="box">
+
+        <div id="main">
+
+            <p class="mainPara"> 12 years of togetherness… countless memories, laughs, fights, growth, and love 💫</p>
+            <p class="mainPara">Yet here I am, with the same flutter in my heart, asking you again —</p>
+            <p class="mainText">Will you be my Valentine? ❤️</p>
+            <p class="mainPara">Not just for a day, but for the lifetime we are still writing together.</p>
+            <div class="buttons">
+                <button id="yes">Yes</button>
+                <button id="no">No</button>
+            </div>
+
+        </div>
+
+        <div id="thanks" class="hidden">
+            <div class="bigHeart">❤️</div>
+            <p class="quote">Thank you for being my yes — not just today, but every day for the last 12 years.
+            <p class="mainPara">You are my comfort, my strength, my laughter, and my home.</p>
+            <p class="mainPara">I don’t promise perfection, but I promise love, effort, and a forever where I keep
+                choosingyou — again and again.</p>
+            <p class="mainPara">Here’s to us… to growing old together, to holding hands through everything, and to
+                beingyours — always.</p>
+        </div>
+
+    </div>
+
+    <script>
+
+        const noBtn = document.getElementById("no");
+        const box = document.getElementById("box");
+        const yes = document.getElementById("yes");
+        const song = document.getElementById("song");
+
+        /* Moving NO */
+
+        noBtn.addEventListener("touchstart", moveNo);
+        noBtn.addEventListener("mouseover", moveNo);
+
+        function moveNo() {
+            const rect = box.getBoundingClientRect();
+            const maxX = rect.width - noBtn.offsetWidth - 20;
+            const maxY = rect.height - noBtn.offsetHeight - 20;
+
+            let x, y;
+            do {
+                x = Math.random() * maxX;
+                y = Math.random() * maxY;
+            } while (x < 80);
+
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+        }
+
+        /* Emoji Hearts */
+
+        function heart() {
+            const h = document.createElement("div");
+            h.className = "heart";
+            h.innerHTML = "❤️";
+            h.style.left = Math.random() * 100 + "vw";
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 10000);
+        }
+
+        const heartInterval = setInterval(heart, 500);
+        let imgInterval;
+
+        /* Image Hearts */
+
+        function heartIMG() {
+            const h = document.createElement("div");
+            h.className = "heart-img";
+            h.innerHTML = `<img src="/Users/greatplaceitservices/Downloads/edited-photo (1).png">`;
+            h.style.left = Math.random() * 100 + "vw";
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 19000);
+        }
+
+        /* Fireworks */
+
+        const canvas = document.getElementById("fireworks");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+
+        let particles = [];
+
+        function explode(x, y) {
+            for (let i = 0; i < 60; i++) {
+                particles.push({
+                    x, y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    life: 100
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = "white";
+                ctx.fill();
+
+                if (p.life <= 0) particles.splice(i, 1);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        /* YES CLICK */
+
+        yes.onclick = () => {
+
+            clearInterval(heartInterval);       // stop emoji hearts
+            imgInterval = setInterval(heartIMG, 400); // start image hearts
+
+            document.getElementById("main").classList.add("hidden");
+            document.getElementById("thanks").classList.remove("hidden");
+
+            song.play();
+
+            setInterval(() => {
+                explode(Math.random() * canvas.width,
+                    Math.random() * canvas.height / 2);
+            }, 600);
+        };
+
+    </script>
+
+</body>
+
+</html>
